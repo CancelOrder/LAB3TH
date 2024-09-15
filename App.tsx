@@ -3,61 +3,81 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { createStackNavigator, StackScreenProps } from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import CategoriesScreen from './src/screens/CategoriesScreen';
 import FavoritesScreen from './src/screens/FavoritesScreen';
 import SettingsScreen from './src/screens/SettingsScreen';
-import MealsScreen from './src/screens/MealsScreen';
+import ContactDetailScreen from './src/screens/ContactDetailScreen'; // Import the screen
 
-import LauScreen from './src/screens/LauScreen';
-
-// Định nghĩa kiểu dữ liệu cho tham số
-type RootStackParamList = {
-  Favorites: { favoriteMeals: any[] };
-};
-
-// Stack Navigator cho Meals và Lau
+// Stack Navigator for Categories
 const Stack = createStackNavigator();
-const MealsStackNavigator = () => (
-  <Stack.Navigator>
+const CategoriesStackNavigator = () => (
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: '#f8f8f8' },
+      headerTitleStyle: { fontWeight: 'bold', fontSize: 16 },
+      headerTintColor: 'black',
+    }}
+  >
     <Stack.Screen
-      name="Categories"
+      name="Contacts"
       component={CategoriesScreen}
-      options={{ headerShown: false }} // Ẩn tiêu đề của Stack Navigator cho Categories
+      options={{
+        title: 'Contacts',
+        headerBackTitle: 'Back',
+        headerShown: false,
+      }}
     />
-    <Stack.Screen name="Meals" component={MealsScreen} />
-    <Stack.Screen name="Lau" component={LauScreen} />
+    <Stack.Screen
+      name="ContactDetail"  // Ensure the name matches
+      component={ContactDetailScreen}  // Ensure the component is correctly passed here
+      options={{
+        title: 'Contact Detail',
+      }}
+    />
   </Stack.Navigator>
 );
 
-// Stack Navigator cho Favorites
+
 const FavoritesStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: '#f8f8f8' },
+      headerTitleStyle: { fontWeight: 'bold', fontSize: 16 },
+      headerTintColor: 'black',
+    }}
+  >
     <Stack.Screen
       name="Favorites"
       component={FavoritesScreen}
       options={{
-        headerTitle: 'Favorites',
+        title: 'Favorites',
+        headerBackTitle: 'Back',
       }}
     />
   </Stack.Navigator>
 );
 
-
-// Stack Navigator cho Settings
 const SettingsStackNavigator = () => (
-  <Stack.Navigator>
+  <Stack.Navigator
+    screenOptions={{
+      headerStyle: { backgroundColor: '#f8f8f8' },
+      headerTitleStyle: { fontWeight: 'bold', fontSize: 16 },
+      headerTintColor: 'black',
+    }}
+  >
     <Stack.Screen
       name="Settings"
       component={SettingsScreen}
       options={{
-        headerTitle: 'Settings', // Hiển thị tiêu đề khi chuyển sang trang cài đặt
+        title: 'Settings',
+        headerBackTitle: 'Back',
       }}
     />
   </Stack.Navigator>
 );
 
-// Tạo Bottom Tab Navigator
+// Create Bottom Tab Navigator
 const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator
@@ -66,29 +86,44 @@ const TabNavigator = () => (
       tabBarActiveTintColor: 'tomato',
       tabBarInactiveTintColor: 'gray',
     }}
+
   >
-    <Tab.Screen name="Categories" component={MealsStackNavigator} />
+    <Tab.Screen name="Contacts" component={CategoriesStackNavigator} />
     <Tab.Screen name="Favorites" component={FavoritesStackNavigator} />
     <Tab.Screen name="Settings" component={SettingsStackNavigator} />
   </Tab.Navigator>
 );
 
-// Tạo Drawer Navigator nếu bạn muốn giữ Drawer Navigation
+// Create Drawer Navigator
 const Drawer = createDrawerNavigator();
 
 const App = () => {
   return (
-
     <NavigationContainer>
-      {/* Nếu bạn muốn giữ Drawer Navigation */}
-      <Drawer.Navigator initialRouteName="Home">
-        <Drawer.Screen name="Home" component={TabNavigator} />
-        <Drawer.Screen name="Favorites" component={FavoritesStackNavigator} />
-        <Drawer.Screen name="Settings" component={SettingsStackNavigator} />
-      </Drawer.Navigator>
+      {/* Drawer Navigator */}
+      <Drawer.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          headerShown: true, // Hide the header for Drawer.Navigator
+        }}
+      >
+        <Drawer.Screen
+          name="Home"
+          component={TabNavigator}
+          options={{ drawerLabel: 'Home' }}
 
-      {/* Nếu bạn không cần Drawer Navigation, chỉ sử dụng TabNavigator */}
-      {/* <TabNavigator /> */}
+        />
+        <Drawer.Screen
+          name="Favorites"
+          component={FavoritesStackNavigator}
+          options={{ drawerLabel: 'Favorites' }}
+        />
+        <Drawer.Screen
+          name="Settings"
+          component={SettingsStackNavigator}
+          options={{ drawerLabel: 'Settings' }}
+        />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 };
